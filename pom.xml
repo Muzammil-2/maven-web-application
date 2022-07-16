@@ -21,14 +21,18 @@
 		<spring.version>5.1.2.RELEASE</spring.version>
 		<junit.version>4.11</junit.version>
 		<log4j.version>1.2.17</log4j.version>
-		<sonar.host.url>http://13.233.216.196:9980/</sonar.host.url>
-		<sonar.login>admin</sonar.login>
-		<sonar.password>admin</sonar.password> 
+		<sonar.host.url>http://13.127.184.159:9000/project</sonar.host.url>
+		<sonar.login>6d5df3f1c60706b676903213c0da6e8db9e5d46e</sonar.login> 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 	</properties>
-
+         <repositories>
+              <repository>
+		  <id>nexus</id>
+		  <url>http://43.204.37.33:8081/repository/remote-repo/</url>
+             </repository>
+	 </repositories>
 	<dependencies>
 		
 		<dependency>
