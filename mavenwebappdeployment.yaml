@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: mavenwebappcontainer
-          image: dockerhandson/maven-web-application:TAG
+          image: us-central1-docker.pkg.dev/$GOOGLE_PROJECT/mavenwebapplication/mavenwebapp:latest
           ports:
             - containerPort: 8080
           resources:
