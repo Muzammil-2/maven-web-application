@@ -1,49 +1,22 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
 name: Java CI with Maven
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ master ]
+    branches: [ "main" ]
 
 jobs:
-   deploy:
-       runs-on: ubuntu-latest
-       steps:
-       
-       - name: checkout
-         uses: actions/checkout@v2
-       - name: Set up JDK 11
-         uses: actions/setup-java@v2
-         with:
-           java-version: '11'
-           distribution: 'adopt'
-           cache: maven
-         - name: Build with Maven
-           run: mvn -B package --file pom.xml
-       - name: install the gcloud cli
-         uses: google-github-actions/setup-gcloud@v0
-        with:
-             project_id: ${{ secrets.GOOGLE_PROJECT }}
-             service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-             install_components: 'gke-gcloud-auth-plugin'
-             export_default_credentials: true
+  build:
+    runs-on: ubuntu-latest
 
-       - name: build and push the docker image
-         env:
-            GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-         run: |
-                   gcloud auth configure-docker us-central1-docker.pkg.dev
-                   docker build -t us-central1-docker.pkg.dev/$GOOGLE_PROJECT/mavenwebapplication/mavenwebapp:latest .
-                   docker push us-central1-docker.pkg.dev/$GOOGLE_PROJECT/mavenwebapplication/mavenwebapp:latest .
-
-       - name: deploy to gke
-         env:
-            GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-         run: |
-                 gcloud container clusters get-credentials githubaction --zone us-central1-c --project swift-terra-417207
-                 sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" mavenwebappdeployment.yaml
-                 kubectl apply -f mavenwebappdeployment.yaml
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
